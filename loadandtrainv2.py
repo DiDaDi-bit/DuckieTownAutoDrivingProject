@@ -52,9 +52,9 @@ def main():
     #print('hough',hough.shape)
     #print('segment',segment.shape)
     #print('im',im.shape)
-    model=load_model('model.h5')
+    model=load_model('model1.h5')
     history=model.fit(dataGen(xtrain,ytrain,100),steps_per_epoch=100,epochs=5,validation_data=dataGen(xval,yval,50),validation_steps=50)
-    model.save('model.h5')
+    model.save('model1.h5')
     print('Model Saved')
 
     #plt.plot(history.history['loss'])
@@ -93,9 +93,9 @@ def createModel():
 
     model.add(Flatten())
     model.add(Dense(100,activation='relu'),kernel_regularizer=regularizers.l2(0.1))
-    model.add(Dropout(0.5))
+    #model.add(Dropout(0.5))
     model.add(Dense(50,activation='relu'),kernel_regularizer=regularizers.l2(0.1))
-    model.add(Dropout(0.5))
+    #model.add(Dropout(0.5))
     model.add(Dense(10,activation='relu'),kernel_regularizer=regularizers.l2(0.1))
     model.add(Dense(1))
 

@@ -39,6 +39,9 @@ def main():
         im=np.array([im])
         # decide on steering using PD control
         steering_angle=float(model.predict(im))
+        # You should use your control skills here!
+        # Try adaptive PID or model-predictive control, for example!
+        # And/or you can use your reinforcement learning skills!
 
         obs, reward, done, info = env.step([car_speed, steering_angle])
 

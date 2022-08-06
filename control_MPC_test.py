@@ -107,7 +107,7 @@ def main():
         lane_position = env.get_lane_pos2(env.cur_pos, env.cur_angle)
         distance_to_road_center = lane_position.dist
         angle_from_straight_in_rads = lane_position.angle_rad
-        car_speed = 0.1
+        car_speed = 0.05
 
         # decide on steering angle using MPC
         steering_angle = MPC(distance_to_road_center , angle_from_straight_in_rads)

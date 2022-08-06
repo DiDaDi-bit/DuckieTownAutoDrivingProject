@@ -45,7 +45,7 @@ from tensorflow.keras.models import load_model
 
 def main():
     # create environment with a map
-    model=load_model('modelhough30.h5')
+    model=load_model('model.h5')
     env = DuckietownEnv(map_name="udem1", domain_rand=False, draw_bbox=False)
     env.reset()
     env.render()
@@ -89,7 +89,7 @@ def main():
         # let the simulator update its display
         env.render()
 
-        if env.step_count<=3000:
+        if env.step_count<=1500:
             im = Image.fromarray(env.render_obs())
 
         if done:

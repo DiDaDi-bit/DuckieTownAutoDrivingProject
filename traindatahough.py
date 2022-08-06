@@ -25,7 +25,6 @@ from keras import regularizers
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Flatten
 #from tensorflow.keras.layers import MaxPooling
-from tensorflow.keras.models import load_model
 
 
 def main():
@@ -43,17 +42,22 @@ def main():
     im_gray = cv.cvtColor(im, cv.COLOR_BGR2GRAY)
     canny = do_canny(im_gray)
     segment = do_segment(canny)
+    #use hough to train in the first
     hough = cv.HoughLinesP(segment, 2, np.pi / 180, 100, np.array([]), minLineLength = 50, maxLineGap = 60)
+    #use line to train in the second
     lines_visualize = visualize_lines(segment, hough)
     print('hough',hough.shape)
     print('segment',segment.shape)
     print('im',im.shape)
     print('lines_visulaize',lines_visualize.shape)
     model=createModel()
-    history=model.fit(dataGen(xtrain,ytrain,100),steps_per_epoch=100,epochs=30,validation_data=dataGen(xval,yval,50),validation_steps=50)
-    model.save('modelhough.h5')
+    history=model.fit(dataGen(xtrain,ytrain,100),steps_per_epoch=100,epochs=5,validation_data=dataGen(xval,yval,50),validation_steps=50)
+    model.save('modelreghough.h5')
     print('Model Saved')
 
+    #plt.plot(history.history['loss'])
+    #plt.plot(history,history['val_loss'])
+    #plt.show()
 
 def dataGen(imagesPath,steeringList,batchSize):
     while True:
@@ -83,12 +87,12 @@ def createModel():
     model.add(Conv2D(64,(3,3),activation='relu'))
     model.add(Flatten())
 
-    model.add(Dense(100,activation='relu',kernel_regularizer=regularizers.l2(1)))
-    model.add(Dense(50,activation='relu',kernel_regularizer=regularizers.l2(1)))
-    model.add(Dense(10,activation='relu',kernel_regularizer=regularizers.l2(1)))
-    #model.add(Dense(100,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
-    #model.add(Dense(50,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
-    #model.add(Dense(10,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
+    #model.add(Dense(100,activation='relu'))
+    #model.add(Dense(50,activation='relu'))
+    #model.add(Dense(10,activation='relu'))
+    model.add(Dense(100,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
+    model.add(Dense(50,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
+    model.add(Dense(10,activation='relu',kernel_regularizer=regularizers.l2(0.1)))
     model.add(Dense(1))
 
     model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),loss='mse')

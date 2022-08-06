@@ -24,12 +24,12 @@ from tensorflow.keras.layers import Dropout
 from tensorflow.keras import regularizers
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.layers import Flatten
-#from tensorflow.keras.layers import MaxPooling
+from tensorflow.keras.layers import MaxPooling
 
 
 def main():
-    path='C:\\Users\\Newton\\OneDrive\\桌面\\ELEN 90088 Machine Learning\\workshops\\LDI project\\Autodriving\\AD_kit-Canvas_v1\\AD_kit-Canvas_v1\\gym-duckietown-kit\\starterkit\\csvdata1\\'
-    path2='datacollect1\\'
+    path='C:\\Users\\Newton\\OneDrive\\桌面\\ELEN 90088 Machine Learning\\workshops\\LDI project\\Autodriving\\AD_kit-Canvas_v1\\AD_kit-Canvas_v1\\gym-duckietown-kit\\starterkit\\csvdata\\'
+    path2='datacollect\\'
     data=importdatainfo(path)
     print(data.head)
     imagespath,steerings=loaddata(path2,data)
@@ -51,7 +51,7 @@ def main():
     print('im',im.shape)
     model=createModel()
     history=model.fit(dataGen(xtrain,ytrain,100),steps_per_epoch=100,epochs=10,validation_data=dataGen(xval,yval,50),validation_steps=50)
-    model.save('test.h5')
+    model.save('model.h5')
     print('Model Saved')
 
     #plt.plot(history.history['loss'])
@@ -89,9 +89,9 @@ def createModel():
     #model.add(MaxPooling(pool_size=(2,2)))
 
     model.add(Flatten())
-    model.add(Dense(100,activation='relu',kernel_regularizer=regularizers.l2(1)))
-    model.add(Dense(50,activation='relu',kernel_regularizer=regularizers.l2(1)))
-    model.add(Dense(10,activation='relu',kernel_regularizer=regularizers.l2(1)))
+    model.add(Dense(100,activation='relu'))
+    model.add(Dense(50,activation='relu'))
+    model.add(Dense(10,activation='relu'))
     model.add(Dense(1))
 
     model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.0001),loss='mse')
